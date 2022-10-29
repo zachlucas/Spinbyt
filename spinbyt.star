@@ -1,3 +1,10 @@
+"""
+Applet: Spinbyt
+Summary: Shows charge & range of nearby Spin scooters
+Description: App that shows the nearest Spin scooter, its battery level, and number of other nearby scooters. Includes a scooter icon.
+Author: zachlucas
+"""
+
 load("render.star", "render")
 load("http.star", "http")
 load("encoding/base64.star", "base64")
@@ -20,7 +27,6 @@ DEFAULT_LOCATION = """
 
 DEFAULT_CITY = "pittsburgh"
 
-# App for the Tidbyt that shows the nearest Spin scooter, its battery level, and number of other nearby scooters
 def main(config):
 
     # City from configuration:
@@ -66,25 +72,43 @@ def main(config):
     closest_bike_battery_percentage = closest_bike["current_range_meters"] / 19200.0
     battery_width = int(25 * closest_bike_battery_percentage)
 
-    print("Percentage")
-    print(closest_bike_battery_percentage)
-
     # Convert distance to miles for display:
     closest_distance *= 0.621371
 
     # Battery UI stack:
+    battery_background_color = "#555"
     battery_stack = render.Stack(
      children=[
-          render.Box(width=25, height=4, color="#666"),
-          render.Box(width=battery_width, height=4, color="#0f0"),
+          render.Box(width=25, height=2, color=battery_background_color),
+          render.Box(width=battery_width, height=2, color="#0f0"),
       ],
+    )
+
+    battery_column = render.Column(
+        children = [
+            render.Box(width=25, height=1, color=battery_background_color),
+            battery_stack,
+            render.Box(width=25, height=1, color=battery_background_color),
+        ]
+    )
+
+    full_battery = render.Row(
+        expanded=True, # Use as much horizontal space as possible
+        main_align="center", # Controls horizontal alignment
+        cross_align="center", # Controls vertical alignment
+        children = [
+            render.Box(width=1, height=2, color=battery_background_color),
+            render.Box(width=1, height=4, color=battery_background_color),
+            battery_column,
+            render.Box(width=1, height=2, color=battery_background_color),
+        ],
     )
 
     # Scooter and battery UI box:
     scooter_and_battery_box = render.Column(
      children=[
         render.Image(src=scooter_image),
-        battery_stack
+        full_battery
      ],
     )
 
