@@ -70,7 +70,7 @@ def main(config):
     # Max range is found in the scooter type response here:
     #  https://gbfs.spin.pm/api/gbfs/v2_3/{city}/vehicle_types
     closest_bike_battery_percentage = closest_bike["current_range_meters"] / 19200.0
-    battery_width = int(25 * closest_bike_battery_percentage)
+    battery_width = int(24 * closest_bike_battery_percentage)
 
     # Convert distance to miles for display:
     closest_distance *= 0.621371
@@ -79,16 +79,16 @@ def main(config):
     battery_background_color = "#555"
     battery_stack = render.Stack(
      children=[
-          render.Box(width=25, height=2, color=battery_background_color),
+          render.Box(width=24, height=2, color="#222"),
           render.Box(width=battery_width, height=2, color="#0f0"),
       ],
     )
 
     battery_column = render.Column(
         children = [
-            render.Box(width=25, height=1, color=battery_background_color),
+            render.Box(width=24, height=1, color=battery_background_color),
             battery_stack,
-            render.Box(width=25, height=1, color=battery_background_color),
+            render.Box(width=24, height=1, color=battery_background_color),
         ]
     )
 
@@ -100,6 +100,7 @@ def main(config):
             render.Box(width=1, height=2, color=battery_background_color),
             render.Box(width=1, height=4, color=battery_background_color),
             battery_column,
+            render.Box(width=1, height=4, color=battery_background_color),
             render.Box(width=1, height=2, color=battery_background_color),
         ],
     )
