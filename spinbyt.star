@@ -9,8 +9,8 @@ DEFAULT_URL = "https://gbfs.spin.pm/api/gbfs/v2_3/%s/free_bike_status"
 
 DEFAULT_LOCATION = """
 {
-	"lat": "40.4416915227295",
-	"lng": "-79.99459018280332",
+	"lat": "40.46049905272754",
+	"lng": "-79.95109706964388",
 	"description": "600 Grant St, Pittsburgh, PA, USA",
 	"locality": "Pittsburgh",
 	"place_id": "ChIJCSF8lBZEwokRhngABHRcdoI",
@@ -60,9 +60,14 @@ def main(config):
             number_of_nearby_bikes += 1
 
     # Now that we have the closest bike, get the battery percentage
-    # The max range (seems to be) 21,600 meters, so use that to figure out the battery percentage:
-    closest_bike_battery_percentage = closest_bike["current_range_meters"] / 21600.0
+    # The max range is 19,200 meters, so use that to figure out the battery percentage:
+    # Max range is found in the scooter type response here:
+    #  https://gbfs.spin.pm/api/gbfs/v2_3/{city}/vehicle_types
+    closest_bike_battery_percentage = closest_bike["current_range_meters"] / 19200.0
     battery_width = int(25 * closest_bike_battery_percentage)
+
+    print("Percentage")
+    print(closest_bike_battery_percentage)
 
     # Convert distance to miles for display:
     closest_distance *= 0.621371
